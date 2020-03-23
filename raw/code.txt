@@ -1,0 +1,6 @@
+var a = 1 * 2 + 3 - 1 * 4 == 3;print a
+var b = true
+var c = a && ! b
+var d = ! c
+print d
+print 1 + 3
