@@ -1,7 +1,9 @@
-package interpreter.parser
+package interpreter.parser.inliner
 
 import interpreter.exceptions.InvalidSemicolonException
 import interpreter.exceptions.InvalidStatementLevelException
+import interpreter.parser.*
+import interpreter.parser.utils.*
 
 fun Code.inline(): Code {
     return flatMap {
@@ -14,7 +16,7 @@ private fun String.inlineSemicolons(): List<String> {
 
     val inlined = mutableListOf<String>()
 
-    var currentStatementLevel = 0
+    var currentBracketLevel = 0
 
     var currentLineStart = 0
 
@@ -23,15 +25,15 @@ private fun String.inlineSemicolons(): List<String> {
             SEMICOLON -> {
                 if (currentLineStart == index) throw InvalidSemicolonException(this, index)
 
-                if (currentStatementLevel == 0)  {
+                if (currentBracketLevel == 0) {
                     inlined.add(substring(currentLineStart, index))
                     currentLineStart = index + 1
                 }
             }
-            STATEMENT_START -> currentStatementLevel++
-            STATEMENT_END -> {
-                currentStatementLevel--
-                if (currentStatementLevel < 0) throw InvalidStatementLevelException(this, index)
+            BRACKET_START -> currentBracketLevel++
+            BRACKET_END -> {
+                currentBracketLevel--
+                if (currentBracketLevel < 0) throw InvalidStatementLevelException(this, index)
             }
         }
     }

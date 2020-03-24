@@ -6,15 +6,16 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.cast
 import kotlin.reflect.full.safeCast
 
-inline fun <reified A : Any> IExpression.castOrTypedExecute(context: Context): A {
-    return safeCast(A::class)
+
+inline fun <reified T : IExpression> IExpression.castOrTypedExecute(context: Context): T {
+    return safeCast(T::class)
         ?: safeTypedExecute(context)
         ?: throw IllegalStateException(
-            "Neither ${this::class.simpleName} nor it's execute result is subtype of requested type ${A::class.simpleName}"
+            "Neither ${this::class.simpleName} nor it's execute result is subtype of requested type ${T::class.simpleName}"
         )
 }
 
-inline fun <reified T : IExpression, reified A> IExpression.safeCastOrTypedExecute(context: Context): A? {
+inline fun <reified T : IExpression> IExpression.safeCastOrTypedExecute(context: Context): T? {
     return safeCastedExecute(context, T::class)
         ?: safeTypedExecute(context)
 }
@@ -29,6 +30,25 @@ inline fun <reified T : IExpression, reified A> IExpression.castedExecute(contex
 
 inline fun <reified T : IExpression, reified A> IExpression.safeCastedExecute(context: Context, type: KClass<T>): A? {
     return safeCastedRun(type) { it.execute(context) } as? A
+}
+
+/**
+ * @see safeTypedAction
+ * @throws IllegalStateException if cast was failed
+ */
+inline fun <reified T> IExpression.typedDeepExecute(context: Context): T {
+    return safeTypedDeepExecute(context)
+        ?: throw IllegalStateException(
+            "$this (${this::class.simpleName}) should deep return ${T::class.simpleName}"
+        )
+}
+
+/**
+ * @see safeTypedAction
+ * @return expression execute result or null if execute result cast was failed
+ */
+inline fun <reified T> IExpression.safeTypedDeepExecute(context: Context): T? {
+    return safeTypedAction { deepExecute(context) }
 }
 
 /**
@@ -79,3 +99,12 @@ inline fun <reified T : Any, A> Any.safeCastedRun(type: KClass<T>, action: (T) -
 
 fun <T : Any> Any.cast(clazz: KClass<out T>): T = clazz.cast(this)
 fun <T : Any> Any.safeCast(clazz: KClass<out T>): T? = clazz.safeCast(this)
+
+fun IExpression.deepExecute(context: Context): Any? {
+    var expression: Any? = this
+    while (expression is IExpression) {
+        expression = expression.execute(context)
+    }
+
+    return expression
+}

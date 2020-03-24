@@ -1,6 +1,6 @@
 package interpreter.exceptions
 
-import interpreter.parser.STATEMENT_END
+import interpreter.parser.utils.STATEMENT_END
 
 class InvalidStatementLevelException (
     val line: String,

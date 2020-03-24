@@ -6,6 +6,9 @@ object Context {
     private val variables: MutableMap<String, Any?> = mutableMapOf()
 
     fun addVariable(name: String) {
+        if (variables.containsKey(name))
+            throw IllegalStateException("Variable $name is already created")
+
         variables[name] = null
     }
 

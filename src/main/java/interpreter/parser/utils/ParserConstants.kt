@@ -1,4 +1,4 @@
-package interpreter.parser
+package interpreter.parser.utils
 
 const val SPACE = ' '
 const val NEW_LINE = '\n'

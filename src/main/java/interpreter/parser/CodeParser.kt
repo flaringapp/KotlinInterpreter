@@ -1,9 +1,9 @@
 package interpreter.parser
 
+import interpreter.parser.inliner.inline
 import interpreter.statement.IStatement
 
 typealias Code = List<String>
-typealias LineCode = String
 
 object CodeParser {
 

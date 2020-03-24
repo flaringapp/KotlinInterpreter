@@ -15,6 +15,7 @@ import interpreter.expression.nonTerminal.util.PrintExpression
 import interpreter.expression.nonTerminal.variable.AssignExpression
 import interpreter.expression.nonTerminal.variable.CreateVariableExpression
 import interpreter.expression.terminal.*
+import interpreter.parser.utils.*
 
 object LineParser {
 

@@ -4,27 +4,39 @@ import interpreter.Context
 import interpreter.expression.IActionExpression
 import interpreter.expression.IBooleanExpression
 import interpreter.expression.IExpression
-import interpreter.expression.nonTerminal.variable.AssignExpression
 import interpreter.expression.nonTerminal.INonTerminalExpression
+import interpreter.expression.terminal.VariableExpression
 import interpreter.statement.IStatement
+import interpreter.utils.safeCast
 
 class ForExpression(
-    private val assignExpression: AssignExpression,
-    private val loopCondition: IBooleanExpression,
-    private val iterationEndAction: IExpression,
+    private val preExecuteAction: IExpression?,
+    private val loopCondition: IExpression?,
+    private val iterationEndAction: IExpression?,
     private val iterationAction: IStatement
 ) : INonTerminalExpression, IActionExpression {
 
     override fun execute(context: Context) {
-        assignExpression.execute(context)
+        preExecuteAction?.execute(context)
 
-        while (loopCondition.execute(context)) {
+        val loopConditionAction: () -> Boolean =
+            loopCondition?.let { condition ->
+                condition.safeCast(IBooleanExpression::class)?.let { { it.execute(context) } }
+                    ?: condition.safeCast(VariableExpression::class)?.let {
+                        {
+                            it.execute(context) as? Boolean
+                                ?: throw IllegalStateException("Variable ${it.name} should be boolean")
+                        }
+                    } ?: throw IllegalStateException("$loopCondition should be a boolean expression")
+            } ?: { true }
+
+        while (loopConditionAction()) {
             iterationAction.execute(context)
-            iterationEndAction.execute(context)
+            iterationEndAction?.execute(context)
         }
     }
 
     override fun toString(): String {
-        return "for($assignExpression | $loopCondition | $iterationEndAction)"
+        return "for($preExecuteAction | $loopCondition | $iterationEndAction)"
     }
 }
