@@ -24,7 +24,6 @@ object LineParser {
             if (isDirty) codeLine.trimSpaces()
             else codeLine
 
-
         if (workingLine.isEmpty()) return null
 
         val expressions = mutableListOf<IExpression>()

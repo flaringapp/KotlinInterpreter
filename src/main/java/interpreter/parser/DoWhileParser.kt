@@ -3,7 +3,7 @@ package interpreter.parser
 import interpreter.expression.nonTerminal.loop.DoExpression
 import interpreter.parser.utils.*
 
-object DoParser {
+object DoWhileParser {
 
     fun parse(code: Code): DoExpression {
         val iterationCode = code.codeInsideStatement()
@@ -15,7 +15,7 @@ object DoParser {
             iterationStatementLastLine.indexOf(STATEMENT_END)
         )
         if (indicesOfIterationStatement.second < code.size - 1) {
-            whileCode += NEW_LINE + code.subList(indicesOfIterationStatement.second + 1, code.size).toLine()
+            whileCode += code.subList(indicesOfIterationStatement.second + 1, code.size).toLine()
         }
 
         val whileKeyIndex = whileCode.indexOf(WHILE)

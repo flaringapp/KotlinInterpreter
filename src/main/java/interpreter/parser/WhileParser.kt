@@ -16,7 +16,7 @@ object WhileParser {
         val iterationCode = code.codeInsideStatement()
 
         val condition = LineParser.parse(conditionLine)
-            ?: throw IllegalStateException("Missing condition in while statement:\n${code.toLine()}")
+            ?: throw IllegalStateException("Missing condition in while statement:\n${code.format()}")
 
         val iterationAction = BlockParser.parse(iterationCode)
 

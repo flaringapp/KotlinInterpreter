@@ -4,4 +4,8 @@ do {
     print a
     print "\n"
     a = a + 1
-} while(a < 5)
+} while(
+    a
+    <
+    5
+)

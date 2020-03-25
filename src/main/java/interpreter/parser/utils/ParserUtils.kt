@@ -26,14 +26,16 @@ fun String.isVariable() = !startsWithDigit() && substring(1, length).isDigitsOrL
 
 fun String.extractString() = substring(indexOfFirst { it == QUOTE } + 1, indexOfLast { it == QUOTE })
 
-fun Code.toLine() = reduce { acc, line ->
-    acc + NEW_LINE + line.trimSpaces()
-}
+fun Code.toLine() = joinToString(separator = " ")
+
+fun Code.format() = joinToString(separator = NEW_LINE.toString())
+
+fun String.asCode() = listOf(this)
 
 fun Code.asLineBeforeStatement(): String {
     val statementStartLineIndex = indexOfFirst { it.contains(STATEMENT_START) }
         .takeIf { it >= 0 }
-        ?: throw IllegalStateException("There is no statement in code:\n${toLine()}")
+        ?: throw IllegalStateException("There is no statement in code:\n${format()}")
     val statementStartLine = this[statementStartLineIndex]
 
     val codeBeforeStatement = this.subList(0, statementStartLineIndex)
@@ -45,17 +47,17 @@ fun Code.asLineBeforeStatement(): String {
     return codeBeforeStatement.toLine()
 }
 
-fun Code.indicesOfFirstStatement(): Pair<Int, Int> {
-    val statementStartLineIndex = indexOfFirst { it.contains(STATEMENT_START) }
+fun Code.indicesOfFirstBlock(start: Char, end: Char): Pair<Int, Int> {
+    val statementStartLineIndex = indexOfFirst { it.contains(start) }
         .takeIf { it >= 0 }
-        ?: throw IllegalStateException("There is no statement in code:\n${toLine()}")
+        ?: throw IllegalStateException("There is no block separated by \"$start\", \"$end\" in code:\n${format()}")
 
     var currentStatementLevel = 0
     for (i in statementStartLineIndex until size) {
         this[i].forEach {
             when (it) {
-                STATEMENT_START -> currentStatementLevel++
-                STATEMENT_END -> {
+                start -> currentStatementLevel++
+                end -> {
                     currentStatementLevel--
                     if (currentStatementLevel == 0) return statementStartLineIndex to i
                 }
@@ -65,8 +67,11 @@ fun Code.indicesOfFirstStatement(): Pair<Int, Int> {
 
     if (currentStatementLevel == 0) return statementStartLineIndex to size - 1
 
-    throw IllegalStateException("Invalid statement in code\n${this.toLine()}")
+    throw IllegalStateException("Invalid statement in code\n${this.format()}")
 }
+
+fun Code.indicesOfFirstStatement() = indicesOfFirstBlock(STATEMENT_START, STATEMENT_END)
+fun Code.indicesOfFirstBrackets() = indicesOfFirstBlock(BRACKET_START, BRACKET_END)
 
 fun Code.codeInsideStatement(): Code {
     val indicesOfStatement = indicesOfFirstStatement()

@@ -6,9 +6,14 @@ import interpreter.parser.*
 import interpreter.parser.utils.*
 
 fun Code.inline(): Code {
-    return flatMap {
-        it.trimSpaces().inlineSemicolons()
-    }
+    return removeEmptyLines()
+        .flatMap {
+            it.trimSpaces().inlineSemicolons()
+        }
+}
+
+private fun List<String>.removeEmptyLines() = filter {
+    it.trimSpaces().isNotEmpty()
 }
 
 private fun String.inlineSemicolons(): List<String> {
@@ -33,7 +38,6 @@ private fun String.inlineSemicolons(): List<String> {
             BRACKET_START -> currentBracketLevel++
             BRACKET_END -> {
                 currentBracketLevel--
-                if (currentBracketLevel < 0) throw InvalidStatementLevelException(this, index)
             }
         }
     }

@@ -1,5 +1,12 @@
-//package interpreter.parser.analyzer
-//
+package interpreter.parser.analyzer
+
+enum class ExpressionType {
+    FOR,
+    WHILE,
+    DO_WHILE,
+    LINE
+}
+
 //import interpreter.parser.*
 //
 //typealias MatchCondition = (String) -> Boolean
