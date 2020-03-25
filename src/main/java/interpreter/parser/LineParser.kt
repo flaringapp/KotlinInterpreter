@@ -19,6 +19,13 @@ import interpreter.parser.utils.*
 
 object LineParser {
 
+    private val SPACE_SAFE_TOKENS = listOf(
+        ASSIGN,
+        PLUS, MINUS, STAR, SLASH,
+        EQUALS, NOT_EQUALS, MORE, MORE_EQUALS, LESS, LESS_EQUALS,
+        AND, OR, NOT
+    )
+
     fun parse(codeLine: String, isDirty: Boolean = false): IExpression? {
         var workingLine =
             if (isDirty) codeLine.trimSpaces()
@@ -26,21 +33,36 @@ object LineParser {
 
         if (workingLine.isEmpty()) return null
 
-        val expressions = mutableListOf<IExpression>()
-
-        while (workingLine.isNotEmpty()) {
-            val tokenEndIndex = workingLine.indexOf(SPACE)
-                .takeIf { index -> index != -1 }
-                ?: workingLine.length
-
-            val token = workingLine.substring(0, tokenEndIndex)
-
-            expressions += parseToken(token)
-
-            workingLine = workingLine.substring(tokenEndIndex, workingLine.length).trimStartSpaces()
-        }
+        val expressions = workingLine.splitToTokens()
+            .map { parseToken(it) }
 
         return TreeParser.createTree(expressions)
+    }
+
+    private fun String.splitToTokens(): List<String> {
+        return split(SPACE, TAB, NEW_LINE)
+            .flatMap { complexToken ->
+                val simpleTokens = mutableListOf<String>()
+
+                var safeExpressionEndIndex = 0
+
+                while (true) {
+                    complexToken.findAnyOf(SPACE_SAFE_TOKENS, safeExpressionEndIndex)?.let {
+                        if (safeExpressionEndIndex != it.first) {
+                            simpleTokens += complexToken.substring(safeExpressionEndIndex, it.first)
+                        }
+                        simpleTokens += it.second
+
+                        safeExpressionEndIndex = it.first + it.second.length
+                    } ?: break
+                }
+
+                if (safeExpressionEndIndex != complexToken.length) {
+                    simpleTokens += complexToken.substring(safeExpressionEndIndex)
+                }
+
+                simpleTokens
+            }
     }
 
     private fun parseToken(token: String): IExpression {

@@ -1,6 +1,7 @@
 package interpreter.parser.utils
 
 const val SPACE = ' '
+const val TAB = '\t'
 const val NEW_LINE = '\n'
 
 const val STATEMENT_START = '{'
