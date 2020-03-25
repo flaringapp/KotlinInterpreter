@@ -11,7 +11,7 @@ object WhileParser {
         val conditionLine = whileConditionLine.substring(
             whileConditionLine.indexOf(BRACKET_START) + 1,
             whileConditionLine.lastIndexOf(BRACKET_END)
-        ).trimEndSpaces()
+        ).trimSpaces()
 
         val iterationCode = code.codeInsideStatement()
 

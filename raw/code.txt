@@ -1,7 +1,7 @@
 var a = 0
 
-while(a < 5) {
+do {
     print a
     print "\n"
     a = a + 1
-}
+} while(a < 5)
