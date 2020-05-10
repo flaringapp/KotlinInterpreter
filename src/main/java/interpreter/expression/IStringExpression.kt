@@ -1,3 +1,0 @@
-package interpreter.expression
-
-interface IStringExpression: ITypedValueExpression<String>
