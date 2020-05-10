@@ -3,6 +3,3 @@ a = a + 6
 var b = a + 1
 print a
 print b + a
-for(;a < 20; a = a + 1) {
-    print "Looping a: " + a
-}

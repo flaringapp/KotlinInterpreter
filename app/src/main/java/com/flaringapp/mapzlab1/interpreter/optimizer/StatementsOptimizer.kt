@@ -24,6 +24,7 @@ object StatementsOptimizer {
     private fun ComplexStatement.removeUnusedVariables() {
         val variables = VariableSearcher.findAllVariables(this)
         VariablesOptimizer.optimizeVariables(this, variables)
+        UnusedVariablesCleaner.cleanUnusedVariables(this, variables)
     }
 
     private fun ComplexStatement.isVariableUsed(name: String): Boolean {
@@ -85,6 +86,12 @@ object StatementsOptimizer {
 
     private fun IExpression.isVariable(name: String) =
         this is VariableExpression && this.name == name
+
+    private fun IExpression.isCreateVariable(name: String): Boolean {
+        return this is CreateVariableExpression &&
+                expression.safeCastedRun(VariableExpression::class) { it.name == name }
+                ?: false
+    }
 
     private object VariableSearcher {
 
@@ -224,7 +231,7 @@ object StatementsOptimizer {
 
         private fun ForExpression.optimizeForVariable(data: VariableData) {
             if (isForVariableUsed(data.variable))
-            preExecuteAction?.optimizeVariable(data)
+                preExecuteAction?.optimizeVariable(data)
             loopCondition?.optimizeVariable(data)
             iterationEndAction?.optimizeVariable(data)
             iterationAction.optimizeVariable(data)
@@ -244,5 +251,45 @@ object StatementsOptimizer {
             val variable: String,
             var value: IExpression?
         )
+    }
+
+    private object UnusedVariablesCleaner {
+
+        fun cleanUnusedVariables(statement: ComplexStatement, variables: List<String>) {
+            variables.forEach {
+                if (!statement.isVariableUsed(it)) statement.cleanUnusedVariable(it)
+            }
+        }
+
+        private fun ComplexStatement.cleanUnusedVariable(variable: String) {
+            val cleanedStatements = statements.toMutableList()
+
+            val iterator = cleanedStatements.listIterator()
+            while (iterator.hasNext()) {
+                if (iterator.next().shouldBeRemoved(variable)) iterator.remove()
+            }
+
+            statements = cleanedStatements.toList()
+        }
+
+        private fun IStatement.shouldBeRemoved(variable: String): Boolean {
+            return when (this) {
+                is IExpression -> shouldExpressionBeRemoved(variable)
+                else -> false
+            }
+        }
+
+        private fun IExpression.shouldExpressionBeRemoved(variable: String): Boolean {
+            if (this.isCreateVariable(variable)) return true
+
+            if (this is AssignExpression) {
+                if (
+                    leftExpression.isCreateVariable(variable) ||
+                    leftExpression.isVariable(variable)
+                ) return true
+            }
+
+            return false
+        }
     }
 }

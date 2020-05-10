@@ -4,7 +4,7 @@ import com.flaringapp.mapzlab1.interpreter.Context
 
 class ComplexStatement(
     val title: String,
-    val statements: List<IStatement>
+    var statements: List<IStatement>
 ) : IStatement {
 
     override fun execute(context: Context) {
