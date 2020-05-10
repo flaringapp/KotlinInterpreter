@@ -12,4 +12,6 @@ class CreateVariableExpression : UnaryExpression() {
         context.addVariable(variable.name)
         return variable
     }
+
+    override fun getData() = "var"
 }

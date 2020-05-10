@@ -20,4 +20,6 @@ class AssignExpression : BinaryExpression() {
     override fun toString(): String {
         return "$leftExpression = $rightExpression"
     }
+
+    override fun getData() = "="
 }

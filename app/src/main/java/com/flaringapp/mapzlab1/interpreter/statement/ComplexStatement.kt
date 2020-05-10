@@ -3,6 +3,7 @@ package com.flaringapp.mapzlab1.interpreter.statement
 import com.flaringapp.mapzlab1.interpreter.Context
 
 class ComplexStatement(
+    val title: String,
     val statements: List<IStatement>
 ) : IStatement {
 
@@ -10,7 +11,7 @@ class ComplexStatement(
         statements.forEach { it.execute(context) }
     }
 
-    companion object {
-        fun empty() = ComplexStatement(emptyList())
-    }
+    override fun getData() = title
+
+    override fun childNodes() = statements
 }

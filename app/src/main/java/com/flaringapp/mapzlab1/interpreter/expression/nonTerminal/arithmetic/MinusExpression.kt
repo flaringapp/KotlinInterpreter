@@ -13,6 +13,8 @@ class SubtractExpression : BinaryExpression(), IValueExpression {
         return (leftValue - rightValue)
             ?: throw IllegalArgumentException("Can't subtract \"$leftValue\" on \"$rightValue\"")
     }
+
+    override fun getData() = "-"
 }
 
 @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")

@@ -9,6 +9,8 @@ abstract class BinaryExpression : INonTerminalExpression {
 
     fun hasLeftExpression() = ::leftExpression.isInitialized
     fun hasRightExpression() = ::rightExpression.isInitialized
+
+    final override fun childNodes() = listOf(leftExpression, rightExpression)
 }
 
 fun <T : BinaryExpression> T.init(leftExpression: IExpression, rightExpression: IExpression) = apply {

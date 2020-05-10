@@ -14,4 +14,6 @@ class LogicalNotExpression : UnaryExpression(), IBooleanExpression {
     override fun toString(): String {
         return "!$expression"
     }
+
+    override fun getData() = "!"
 }

@@ -17,6 +17,8 @@ class MoreExpression : BinaryExpression(), IBooleanExpression {
     override fun toString(): String {
         return "$leftExpression > $rightExpression"
     }
+
+    override fun getData() = ">"
 }
 
 private fun Any.greaterThan(other: Any): Boolean? {

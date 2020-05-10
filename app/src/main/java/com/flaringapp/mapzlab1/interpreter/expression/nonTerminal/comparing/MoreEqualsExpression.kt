@@ -17,4 +17,6 @@ class MoreEqualsExpression : BinaryExpression(), IBooleanExpression {
         }
         return moreExpression.execute(context) && equalsExpression.execute(context)
     }
+
+    override fun getData() = ">="
 }

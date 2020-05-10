@@ -3,6 +3,7 @@ package com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.arithmetic
 import com.flaringapp.mapzlab1.interpreter.Context
 import com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.BinaryExpression
 import com.flaringapp.mapzlab1.interpreter.expression.terminal.IValueExpression
+import com.flaringapp.treeview.ISplitNodeData
 
 class DivideExpression : BinaryExpression(), IValueExpression {
 
@@ -17,6 +18,8 @@ class DivideExpression : BinaryExpression(), IValueExpression {
     override fun toString(): String {
         return "$leftExpression / $rightExpression"
     }
+
+    override fun getData() = "/"
 }
 
 @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")

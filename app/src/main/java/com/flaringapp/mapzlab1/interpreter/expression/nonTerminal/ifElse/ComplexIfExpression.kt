@@ -4,6 +4,7 @@ import com.flaringapp.mapzlab1.interpreter.Context
 import com.flaringapp.mapzlab1.interpreter.expression.IActionExpression
 import com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.INonTerminalExpression
 import com.flaringapp.mapzlab1.interpreter.statement.IStatement
+import com.flaringapp.treeview.ISplitNodeData
 
 class ComplexIfExpression(
     val ifExpressions: List<IIfExpression>,
@@ -20,4 +21,8 @@ class ComplexIfExpression(
         
         elseStatement.execute(context)
     }
+
+    override fun getData() = "complex if [ifExpr[i];else]"
+
+    override fun childNodes() = ifExpressions + elseStatement
 }

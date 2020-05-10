@@ -41,6 +41,7 @@ object LineParser {
 
     private fun String.splitToTokens(): List<String> {
         return split(SPACE, TAB, NEW_LINE)
+            .connectStrings()
             .flatMap { complexToken ->
                 val simpleTokens = mutableListOf<String>()
 

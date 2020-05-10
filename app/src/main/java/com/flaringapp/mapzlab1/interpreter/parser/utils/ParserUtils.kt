@@ -18,9 +18,7 @@ fun String.isDigitsOrLetters() = find { !it.isDigit() && !it.isLetter() } == nul
 
 fun String.isInt() = isDigitsOnly()
 fun String.isBool() = this == TRUE || this == FALSE
-fun String.isString() = length >= 2 && startsWith(QUOTE) && endsWith(
-    QUOTE
-)
+fun String.isString() = length >= 2 && startsWith(QUOTE) && endsWith(QUOTE)
 
 fun String.isVariable() = !startsWithDigit() && substring(1, length).isDigitsOrLetters()
 
@@ -101,4 +99,26 @@ fun Code.codeInsideStatement(): Code {
     }
 
     return codeInsideStatement
+}
+
+fun List<String>.connectStrings(): MutableList<String> {
+    val strings = mutableListOf<String>()
+    var quotedString = ""
+    for (i in indices) {
+        if (quotedString.isNotEmpty()) {
+            quotedString += " " + this[i]
+            if (this[i].endsWith(QUOTE)) {
+                strings += quotedString
+                quotedString = ""
+            }
+        } else if (this[i].startsWith(QUOTE)) {
+            if (this[i].endsWith(QUOTE) && size > 1) {
+                strings += this[i]
+            } else {
+                quotedString += this[i]
+            }
+        } else strings += this[i]
+    }
+    if (quotedString.isNotEmpty()) strings += quotedString
+    return strings
 }

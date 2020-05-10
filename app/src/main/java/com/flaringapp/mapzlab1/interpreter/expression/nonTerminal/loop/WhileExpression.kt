@@ -8,6 +8,7 @@ import com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.INonTerminalEx
 import com.flaringapp.mapzlab1.interpreter.expression.terminal.VariableExpression
 import com.flaringapp.mapzlab1.interpreter.statement.IStatement
 import com.flaringapp.mapzlab1.interpreter.utils.safeCast
+import com.flaringapp.treeview.ISplitNodeData
 
 class WhileExpression(
     val loopCondition: IExpression,
@@ -32,4 +33,8 @@ class WhileExpression(
     override fun toString(): String {
         return "while $loopCondition"
     }
+
+    override fun getData() = "for [cond;iter]"
+
+    override fun childNodes() = listOf(loopCondition, iterationAction)
 }

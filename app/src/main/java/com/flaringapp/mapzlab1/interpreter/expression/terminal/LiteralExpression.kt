@@ -13,4 +13,6 @@ abstract class LiteralExpression<T>(
     override fun toString(): String {
         return value.toString()
     }
+
+    override fun getData() = value.toString()
 }

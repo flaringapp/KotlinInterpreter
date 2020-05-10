@@ -24,6 +24,6 @@ object BlockParser {
             } ?: continue
         }
 
-        return ComplexStatement(trees)
+        return ComplexStatement("Initial", trees)
     }
 }

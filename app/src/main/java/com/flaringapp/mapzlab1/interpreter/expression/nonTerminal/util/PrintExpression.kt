@@ -9,4 +9,6 @@ class PrintExpression : UnaryExpression(), IActionExpression {
     override fun execute(context: Context) {
         println(expression.execute(context))
     }
+
+    override fun getData() = "print"
 }

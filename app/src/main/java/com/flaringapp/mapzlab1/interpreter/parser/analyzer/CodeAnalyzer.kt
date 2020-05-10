@@ -27,7 +27,7 @@ class CodeAnalyzer(initialCode: Code) {
 
         parsingCode.inlineCodeAfterStatementEnd(lastLine, statementIndices.second)
 
-        return parsingCode.subList(0, statementIndices.second)
+        return parsingCode.subList(0, statementIndices.second + 1)
     }
 
     private fun getNextWhile(): Code {

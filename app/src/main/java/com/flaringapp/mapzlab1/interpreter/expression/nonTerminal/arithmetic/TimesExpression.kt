@@ -13,6 +13,8 @@ class TimesExpression : BinaryExpression(), IValueExpression {
         return (leftValue * rightValue)
             ?: throw IllegalArgumentException("Can't multiply \"$leftValue\" by \"$rightValue\"")
     }
+
+    override fun getData() = "*"
 }
 
 @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")

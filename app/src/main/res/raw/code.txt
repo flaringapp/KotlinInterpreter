@@ -1,0 +1,6 @@
+var a = 5
+a = a + 6
+print a
+for(;a < 20; a = a + 1) {
+    print "Looping a: " + a
+}

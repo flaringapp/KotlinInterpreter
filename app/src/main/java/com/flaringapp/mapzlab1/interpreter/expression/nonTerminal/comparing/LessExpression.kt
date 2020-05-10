@@ -17,6 +17,8 @@ class LessExpression : BinaryExpression(), IBooleanExpression {
     override fun toString(): String {
         return "$leftExpression < $rightExpression"
     }
+
+    override fun getData() = "<"
 }
 
 private fun Any.lessThan(other: Any): Boolean? {

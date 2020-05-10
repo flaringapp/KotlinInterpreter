@@ -17,4 +17,6 @@ class LessEqualsExpression : BinaryExpression(), IBooleanExpression {
         }
         return lessExpression.execute(context) && equalsExpression.execute(context)
     }
+
+    override fun getData() = "<="
 }

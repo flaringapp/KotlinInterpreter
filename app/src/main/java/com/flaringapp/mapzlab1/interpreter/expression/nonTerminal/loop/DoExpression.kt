@@ -7,6 +7,7 @@ import com.flaringapp.mapzlab1.interpreter.expression.IExpression
 import com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.INonTerminalExpression
 import com.flaringapp.mapzlab1.interpreter.statement.IStatement
 import com.flaringapp.mapzlab1.interpreter.utils.castedRun
+import com.flaringapp.treeview.ISplitNodeData
 
 class DoExpression(
     val iterationAction: IStatement,
@@ -19,4 +20,8 @@ class DoExpression(
             } while (it.execute(context))
         }
     }
+
+    override fun getData() = "do [iter;cond]"
+
+    override fun childNodes() = listOf(iterationAction, loopCondition)
 }

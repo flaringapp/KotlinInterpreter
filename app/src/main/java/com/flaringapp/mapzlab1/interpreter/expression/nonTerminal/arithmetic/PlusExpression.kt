@@ -13,6 +13,8 @@ class AddExpression : BinaryExpression(), IValueExpression {
         return (leftValue + rightValue)
             ?: throw IllegalArgumentException("Can't add \"$leftValue\" to \"$rightValue\"")
     }
+
+    override fun getData() = "+"
 }
 
 @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")

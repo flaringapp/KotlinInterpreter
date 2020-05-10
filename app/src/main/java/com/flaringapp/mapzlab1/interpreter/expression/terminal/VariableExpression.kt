@@ -14,4 +14,5 @@ class VariableExpression(
         return name
     }
 
+    override fun getData() = toString()
 }
