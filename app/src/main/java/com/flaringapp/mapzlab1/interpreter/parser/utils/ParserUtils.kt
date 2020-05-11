@@ -10,6 +10,7 @@ fun String.trimEndSpaces() = trimStart(*spaces)
 
 fun String.isDigitsOnly() = find { !it.isDigit() } == null
 fun String.isLettersOnly() = find { !it.isLetter() } == null
+fun String.isDigitsOrDot() = find { it != '.' && !it.isDigit() } == null
 
 fun String.startsWithDigit() = isEmpty() || first().isDigit()
 fun String.endsWithDigit() = isEmpty() || last().isDigit()
@@ -17,6 +18,7 @@ fun String.endsWithDigit() = isEmpty() || last().isDigit()
 fun String.isDigitsOrLetters() = find { !it.isDigit() && !it.isLetter() } == null
 
 fun String.isInt() = isDigitsOnly()
+fun String.isDecimal() = isDigitsOrDot()
 fun String.isBool() = this == TRUE || this == FALSE
 fun String.isString() = length >= 2 && startsWith(QUOTE) && endsWith(QUOTE)
 

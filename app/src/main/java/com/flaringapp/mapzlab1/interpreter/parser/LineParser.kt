@@ -91,6 +91,7 @@ object LineParser {
             PRINT -> PrintExpression()
             else -> {
                 when {
+                    token.isDecimal() -> DecimalLiteral(token.toDouble())
                     token.isInt() -> IntLiteral(token.toInt())
                     token.isBool() -> BoolLiteral(token == TRUE)
                     token.isString() -> StringLiteral(token.extractString())
