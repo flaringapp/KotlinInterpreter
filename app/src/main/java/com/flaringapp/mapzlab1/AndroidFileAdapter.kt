@@ -1,9 +1,8 @@
-package com.flaringapp.mapzlab1.interpreter
+package com.flaringapp.mapzlab1
 
 import android.content.Context
-import com.flaringapp.mapzlab1.R
 
-class AndroidFileAdapter {
+object AndroidFileAdapter {
 
     fun readInputFile(context: Context): List<String> {
         val inputStream = context.resources.openRawResource(R.raw.code)

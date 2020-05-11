@@ -1,12 +1,12 @@
 package com.flaringapp.mapzlab1.interpreter.expression.terminal
 
-import com.flaringapp.mapzlab1.interpreter.Context
+import com.flaringapp.mapzlab1.interpreter.IntContext
 
 abstract class LiteralExpression<T>(
     private val value: T
 ) : ITerminalExpression {
 
-    override fun execute(context: Context): T {
+    override fun execute(context: IntContext): T {
         return value
     }
 

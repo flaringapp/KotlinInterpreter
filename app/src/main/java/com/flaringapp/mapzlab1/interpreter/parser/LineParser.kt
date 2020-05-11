@@ -43,6 +43,11 @@ object LineParser {
         return split(SPACE, TAB, NEW_LINE)
             .connectStrings()
             .flatMap { complexToken ->
+                if (complexToken.startsWith(QUOTE) &&
+                    complexToken.endsWith(QUOTE) &&
+                    complexToken.count { it == QUOTE } == 2
+                ) return@flatMap listOf(complexToken)
+
                 val simpleTokens = mutableListOf<String>()
 
                 var safeExpressionEndIndex = 0

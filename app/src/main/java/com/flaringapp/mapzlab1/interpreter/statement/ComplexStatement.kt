@@ -1,13 +1,13 @@
 package com.flaringapp.mapzlab1.interpreter.statement
 
-import com.flaringapp.mapzlab1.interpreter.Context
+import com.flaringapp.mapzlab1.interpreter.IntContext
 
 class ComplexStatement(
     val title: String,
     var statements: List<IStatement>
 ) : IStatement {
 
-    override fun execute(context: Context) {
+    override fun execute(context: IntContext) {
         statements.forEach { it.execute(context) }
     }
 

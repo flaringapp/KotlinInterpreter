@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.flaringapp.mapzlab1.TreeActivity">
+
+    <com.otaliastudios.zoom.ZoomLayout
+        android:id="@+id/zoomLayoutUnoptimized"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:transformation="centerInside"
+        app:transformationGravity="center"
+        app:minZoom="0.5"
+        app:maxZoom="10"
+        app:animationDuration="250"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/zoomLayoutOptimized"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.flaringapp.treeview.TreeView
+            android:id="@+id/treeViewUnoptimized"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </com.otaliastudios.zoom.ZoomLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintTop_toBottomOf="@id/zoomLayoutUnoptimized"
+        app:layout_constraintBottom_toTopOf="@id/zoomLayoutOptimized"/>
+
+    <com.otaliastudios.zoom.ZoomLayout
+        android:id="@+id/zoomLayoutOptimized"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:transformation="centerInside"
+        app:transformationGravity="center"
+        app:minZoom="0.5"
+        app:maxZoom="10"
+        app:animationDuration="250"
+        app:layout_constraintTop_toBottomOf="@id/zoomLayoutUnoptimized"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.flaringapp.treeview.TreeView
+            android:id="@+id/treeViewOptimized"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </com.otaliastudios.zoom.ZoomLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

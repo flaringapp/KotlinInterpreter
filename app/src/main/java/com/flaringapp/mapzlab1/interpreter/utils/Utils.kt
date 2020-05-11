@@ -1,13 +1,13 @@
 package com.flaringapp.mapzlab1.interpreter.utils
 
-import com.flaringapp.mapzlab1.interpreter.Context
+import com.flaringapp.mapzlab1.interpreter.IntContext
 import com.flaringapp.mapzlab1.interpreter.expression.IExpression
 import kotlin.reflect.KClass
 import kotlin.reflect.cast
 import kotlin.reflect.safeCast
 
 
-inline fun <reified T : IExpression> IExpression.castOrTypedExecute(context: Context): T {
+inline fun <reified T : IExpression> IExpression.castOrTypedExecute(context: IntContext): T {
     return safeCast(T::class)
         ?: safeTypedExecute(context)
         ?: throw IllegalStateException(
@@ -15,20 +15,20 @@ inline fun <reified T : IExpression> IExpression.castOrTypedExecute(context: Con
         )
 }
 
-inline fun <reified T : IExpression> IExpression.safeCastOrTypedExecute(context: Context): T? {
+inline fun <reified T : IExpression> IExpression.safeCastOrTypedExecute(context: IntContext): T? {
     return safeCastedExecute(context, T::class)
         ?: safeTypedExecute(context)
 }
 
 
-inline fun <reified T : IExpression, reified A> IExpression.castedExecute(context: Context, type: KClass<T>): A {
+inline fun <reified T : IExpression, reified A> IExpression.castedExecute(context: IntContext, type: KClass<T>): A {
     return castedRun(type) { it.execute(context) } as? A
         ?: throw IllegalStateException(
             "Executing of $this (${this::class.simpleName}) should return ${A::class.simpleName}"
         )
 }
 
-inline fun <reified T : IExpression, reified A> IExpression.safeCastedExecute(context: Context, type: KClass<T>): A? {
+inline fun <reified T : IExpression, reified A> IExpression.safeCastedExecute(context: IntContext, type: KClass<T>): A? {
     return safeCastedRun(type) { it.execute(context) } as? A
 }
 
@@ -36,7 +36,7 @@ inline fun <reified T : IExpression, reified A> IExpression.safeCastedExecute(co
  * @see safeTypedAction
  * @throws IllegalStateException if cast was failed
  */
-inline fun <reified T> IExpression.typedDeepExecute(context: Context): T {
+inline fun <reified T> IExpression.typedDeepExecute(context: IntContext): T {
     return safeTypedDeepExecute(context)
         ?: throw IllegalStateException(
             "$this (${this::class.simpleName}) should deep return ${T::class.simpleName}"
@@ -47,7 +47,7 @@ inline fun <reified T> IExpression.typedDeepExecute(context: Context): T {
  * @see safeTypedAction
  * @return expression execute result or null if execute result cast was failed
  */
-inline fun <reified T> IExpression.safeTypedDeepExecute(context: Context): T? {
+inline fun <reified T> IExpression.safeTypedDeepExecute(context: IntContext): T? {
     return safeTypedAction { deepExecute(context) }
 }
 
@@ -55,7 +55,7 @@ inline fun <reified T> IExpression.safeTypedDeepExecute(context: Context): T? {
  * @see safeTypedAction
  * @throws IllegalStateException if cast was failed
  */
-inline fun <reified T> IExpression.typedExecute(context: Context): T {
+inline fun <reified T> IExpression.typedExecute(context: IntContext): T {
     return safeTypedExecute(context)
         ?: throw IllegalStateException(
             "$this (${this::class.simpleName}) should return ${T::class.simpleName}"
@@ -66,7 +66,7 @@ inline fun <reified T> IExpression.typedExecute(context: Context): T {
  * @see safeTypedAction
  * @return expression execute result or null if execute result cast was failed
  */
-inline fun <reified T> IExpression.safeTypedExecute(context: Context): T? {
+inline fun <reified T> IExpression.safeTypedExecute(context: IntContext): T? {
     return safeTypedAction { execute(context) }
 }
 
@@ -102,7 +102,7 @@ fun <T : Any> Any.cast(clazz: KClass<out T>): T = clazz.cast(this)
 @OptIn(ExperimentalStdlibApi::class)
 fun <T : Any> Any.safeCast(clazz: KClass<out T>): T? = clazz.safeCast(this)
 
-fun IExpression.deepExecute(context: Context): Any? {
+fun IExpression.deepExecute(context: IntContext): Any? {
     var expression: Any? = this
     while (expression is IExpression) {
         expression = expression.execute(context)

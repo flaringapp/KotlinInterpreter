@@ -1,6 +1,8 @@
 package com.flaringapp.mapzlab1.interpreter
 
-object Context {
+class IntContext(
+    private val printAction: (Any?) -> Unit
+) {
 
     //  Variable name <-> value
     private val variables: MutableMap<String, Any?> = mutableMapOf()
@@ -23,5 +25,9 @@ object Context {
                 "Requested variable $name is of not requested type. It is \"$variables\""
             )
         } ?: throw IllegalStateException("There is no variable of name \"$name\"")
+    }
+
+    fun requestPrint(text: Any?) {
+        printAction(text)
     }
 }

@@ -2,26 +2,40 @@ package com.flaringapp.mapzlab1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.flaringapp.mapzlab1.interpreter.AndroidFileAdapter
-import com.flaringapp.mapzlab1.interpreter.Client
+import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         init()
     }
 
     private fun init() {
-        val adapter = AndroidFileAdapter()
+        val text = AndroidFileAdapter.readInputFile(this)
+        codeEditor.setText(text.joinToString("\n"))
+    }
 
-        val code = adapter.readInputFile(this)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
 
-        val tree = Client.run(code)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.next -> onNextPressed()
+            else -> return super.onOptionsItemSelected(item)
+        }
 
-        treeView.setData(tree)
+        return true
+    }
+
+    private fun onNextPressed() {
+        val code = codeEditor.getText().split('\n')
+        TreeActivity.open(this, code)
     }
 }

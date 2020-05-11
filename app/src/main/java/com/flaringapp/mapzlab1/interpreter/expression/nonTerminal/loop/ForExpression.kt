@@ -1,6 +1,6 @@
 package com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.loop
 
-import com.flaringapp.mapzlab1.interpreter.Context
+import com.flaringapp.mapzlab1.interpreter.IntContext
 import com.flaringapp.mapzlab1.interpreter.expression.IActionExpression
 import com.flaringapp.mapzlab1.interpreter.expression.IBooleanExpression
 import com.flaringapp.mapzlab1.interpreter.expression.IExpression
@@ -17,7 +17,7 @@ class ForExpression(
     val iterationAction: IStatement
 ) : INonTerminalExpression, IActionExpression {
 
-    override fun execute(context: Context) {
+    override fun execute(context: IntContext) {
         preExecuteAction?.execute(context)
 
         val loopConditionAction = loopCondition?.let { condition ->

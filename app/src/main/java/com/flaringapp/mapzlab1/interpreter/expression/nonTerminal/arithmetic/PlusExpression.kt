@@ -1,12 +1,12 @@
 package com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.arithmetic
 
-import com.flaringapp.mapzlab1.interpreter.Context
+import com.flaringapp.mapzlab1.interpreter.IntContext
 import com.flaringapp.mapzlab1.interpreter.expression.nonTerminal.BinaryExpression
 import com.flaringapp.mapzlab1.interpreter.expression.terminal.IValueExpression
 
 class AddExpression : BinaryExpression(), IValueExpression {
 
-    override fun execute(context: Context): Any {
+    override fun execute(context: IntContext): Any {
         val leftValue = leftExpression.executeNonNull(context)
         val rightValue = rightExpression.executeNonNull(context)
 
@@ -48,7 +48,7 @@ private operator fun <T> Any.plus(other: Any): T? {
             is Double -> this + other
             else -> null
         }
-        is String -> "this$other"
+        is String -> "$this$other"
         else -> null
     }
 
