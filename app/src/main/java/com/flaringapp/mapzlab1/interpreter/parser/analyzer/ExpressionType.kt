@@ -4,5 +4,6 @@ enum class ExpressionType {
     FOR,
     WHILE,
     DO_WHILE,
+    IF,
     LINE
 }

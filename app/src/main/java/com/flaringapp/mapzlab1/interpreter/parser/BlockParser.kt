@@ -19,6 +19,7 @@ object BlockParser {
                     FOR -> ForParser.parse(code)
                     WHILE -> WhileParser.parse(code)
                     DO_WHILE -> DoWhileParser.parse(code)
+                    IF -> IfParser.parse(code)
                     else -> throw IllegalStateException("Unsupported block type $type")
                 }
             } ?: continue

@@ -37,7 +37,7 @@ object StatementsOptimizer {
             is IIfExpression -> isIfVariableUsed(name)
             is ComplexIfExpression -> {
                 ifExpressions.find { it.isIfVariableUsed(name) } != null ||
-                        elseStatement.isVariableUsed(name)
+                        elseStatement?.isVariableUsed(name) == true
             }
             is ForExpression -> isForVariableUsed(name)
             is DoExpression -> isDoVariableUsed(name)
@@ -139,7 +139,7 @@ object StatementsOptimizer {
 
         private fun ComplexIfExpression.findAllComplexIfVariables(variables: MutableList<String>) {
             ifExpressions.forEach { it.findAllIfVariables(variables) }
-            elseStatement.findAllVariables(variables)
+            elseStatement?.findAllVariables(variables)
         }
 
         private fun ForExpression.findAllForVariables(variables: MutableList<String>) {
@@ -226,7 +226,7 @@ object StatementsOptimizer {
 
         private fun ComplexIfExpression.optimizeComplexIfVariable(data: VariableData) {
             ifExpressions.forEach { it.optimizeIfVariable(data) }
-            elseStatement.optimizeVariable(data)
+            elseStatement?.optimizeVariable(data)
         }
 
         private fun ForExpression.optimizeForVariable(data: VariableData) {

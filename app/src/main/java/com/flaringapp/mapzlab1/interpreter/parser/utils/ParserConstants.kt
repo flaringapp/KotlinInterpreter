@@ -40,4 +40,8 @@ const val FOR = "for"
 const val DO = "do"
 const val WHILE = "while"
 
+const val IF = "if"
+const val ELSE = "else"
+const val ELSE_IF = "$ELSE $IF"
+
 const val PRINT = "print"

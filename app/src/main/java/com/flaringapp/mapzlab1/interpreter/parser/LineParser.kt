@@ -27,7 +27,7 @@ object LineParser {
     )
 
     fun parse(codeLine: String, isDirty: Boolean = false): IExpression? {
-        var workingLine =
+        val workingLine =
             if (isDirty) codeLine.trimSpaces()
             else codeLine
 

@@ -4,6 +4,13 @@ var b = a + 1
 print a
 a = b + 2
 print b + a
+if(a>2) {
+    print "true"
+} else if(a>3){
+    print 3
+} else {
+    print 4
+}
 for(;a < 20; a = a + 1) {
     print "Looping a: " + a
 }

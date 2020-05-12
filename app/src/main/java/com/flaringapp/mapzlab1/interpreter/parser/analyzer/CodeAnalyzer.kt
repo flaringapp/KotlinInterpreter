@@ -15,6 +15,7 @@ class CodeAnalyzer(initialCode: Code) {
             isFor() -> getNextFor().typed(ExpressionType.FOR)
             isWhile() -> getNextWhile().typed(ExpressionType.WHILE)
             isDoWhile() -> getNextDoWhile().typed(ExpressionType.DO_WHILE)
+            isIf() -> getNextIf().typed(ExpressionType.IF)
             else -> getNextLine().asCode().typed(ExpressionType.LINE)
         }.also {
             parsingCode.removeFirst(it.code.size)
@@ -45,7 +46,7 @@ class CodeAnalyzer(initialCode: Code) {
 
         parsingCode.inlineCodeAfterStatementEnd(lastLine, statementIndices.second)
 
-        val whileStatement  = parsingCode[statementIndices.second + 1]
+        val whileStatement = parsingCode[statementIndices.second + 1]
         if (!whileStatement.startsWith(WHILE)) {
             throw IllegalStateException("Missing while condition in do expression: $whileStatement")
         }
@@ -53,6 +54,41 @@ class CodeAnalyzer(initialCode: Code) {
         val whileConditionIndices = parsingCode.indicesOfFirstBrackets()
 
         return parsingCode.subList(0, whileConditionIndices.second + 1)
+    }
+
+    private fun getNextIf(): Code {
+        val ifStatements: MutableList<Code> = mutableListOf()
+        var elseStatement: Code? = null
+
+        var lastStatementEnd = -1
+
+        var workingCode = parsingCode
+
+        while (true) {
+            workingCode = workingCode.subList(lastStatementEnd + 1, workingCode.size)
+            val statementIndices = workingCode.indicesOfFirstStatement()
+            val lastLine = workingCode[statementIndices.second]
+
+            workingCode.inlineCodeAfterStatementEnd(lastLine, statementIndices.second)
+
+            workingCode.subList(0, statementIndices.second + 1).toList().let {
+                if (workingCode[0].startsWith(IF) || workingCode[0].startsWith(ELSE_IF)) {
+                    ifStatements += it
+                } else if (workingCode[0].startsWith(ELSE)) {
+                    elseStatement = it
+                }
+            }
+
+            lastStatementEnd = statementIndices.second
+
+            if (statementIndices.second + 1 >= workingCode.size) break
+            if (!workingCode[statementIndices.second + 1].startsWith(ELSE) &&
+                !workingCode[statementIndices.second + 1].startsWith(ELSE_IF)
+            ) break
+        }
+
+        return if (elseStatement == null) ifStatements.flatten()
+        else ifStatements.flatten() + elseStatement!!
     }
 
     private fun getNextLine(): String {
@@ -65,7 +101,12 @@ class CodeAnalyzer(initialCode: Code) {
 
     private fun isDoWhile() = parsingCode.first().startsWith(DO)
 
-    private fun MutableList<String>.inlineCodeAfterStatementEnd(statementEndLine: String, lineIndex: Int) {
+    private fun isIf() = parsingCode.first().startsWith(IF)
+
+    private fun MutableList<String>.inlineCodeAfterStatementEnd(
+        statementEndLine: String,
+        lineIndex: Int
+    ) {
         val statementEndIndex = statementEndLine.indexOf(STATEMENT_END)
         if (statementEndIndex < statementEndLine.length - 1) {
             this[lineIndex] = statementEndLine.substring(0, statementEndIndex + 1)
